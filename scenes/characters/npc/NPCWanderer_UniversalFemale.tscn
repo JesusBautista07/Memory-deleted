@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" uid="uid://c1s1ft0dfq2m1" path="res://assets/models/characters/UniversalBaseCharacter_Female/Superhero_Female_FullBody.gltf" id="1_model"]
+[ext_resource type="Script" path="res://scripts/npc/npc_wanderer.gd" id="2_wanderer"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_universal_female"]
+radius = 0.38
+height = 1.75
+
+[node name="NPCWanderer_UniversalFemale" type="CharacterBody3D"]
+script = ExtResource("2_wanderer")
+character_kind = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_universal_female")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.875, 0)
+
+[node name="AnimPlayer" type="AnimationPlayer" parent="."]
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

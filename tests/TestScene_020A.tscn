@@ -1,0 +1,488 @@
+[gd_scene load_steps=45 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bp3a1kcre8lqb" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://c8a1b2c3d4e5f" path="res://scenes/objects/Door.tscn" id="2_door"]
+[ext_resource type="PackedScene" uid="uid://bxq1a2interact" path="res://scenes/ui/hud/InteractionPrompt.tscn" id="3_prompt"]
+[ext_resource type="Script" uid="uid://c6vk8ceb7xd48" path="res://scripts/interaction/interaction_manager.gd" id="4_interactionmgr"]
+[ext_resource type="Script" uid="uid://d4c6oqk0y6y6r" path="res://scripts/inventory/inventory.gd" id="5_inventory"]
+[ext_resource type="Script" uid="uid://80yxw6wnawxv" path="res://scripts/objects/pickup_object.gd" id="6_pickup"]
+[ext_resource type="Script" uid="uid://c36ae46xif0dt" path="res://scripts/objects/object_data.gd" id="7_objdata"]
+[ext_resource type="Script" uid="uid://dvxt0hh4mcj3s" path="res://scripts/objects/key_item.gd" id="8_key"]
+[ext_resource type="Script" uid="uid://yhcen0qq6g3o" path="res://scripts/objects/document_item.gd" id="9_document"]
+[ext_resource type="Script" uid="uid://bl3183w6suu0n" path="res://scripts/objects/flashlight_item.gd" id="10_flashlight"]
+[ext_resource type="Script" uid="uid://b2ghd5poy62e0" path="res://scripts/objects/voice_recorder_item.gd" id="11_recorder"]
+[ext_resource type="Script" uid="uid://gnr8jc3eb78d" path="res://scripts/objects/phone_item.gd" id="12_phone"]
+[ext_resource type="Script" uid="uid://dlw8xt1pmbe8d" path="res://scripts/objects/watch_item.gd" id="13_watch"]
+[ext_resource type="Script" uid="uid://bj60wkx20708k" path="res://scripts/objects/important_item.gd" id="14_important"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_test"]
+
+[sub_resource type="Sky" id="Sky_test"]
+sky_material = SubResource("SkyMaterial_test")
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 2
+sky = SubResource("Sky_test")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="StandardMaterial3D" id="Mat_wall"]
+albedo_color = Color(0.6, 0.6, 0.65, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_ns"]
+size = Vector3(41, 6, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_ns"]
+size = Vector3(41, 6, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall_e"]
+size = Vector3(0.5, 6, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wall_e"]
+size = Vector3(0.5, 6, 40)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ramp"]
+albedo_color = Color(0.85, 0.5, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+size = Vector3(8, 0.3, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(8, 0.3, 5)
+
+[sub_resource type="StandardMaterial3D" id="Mat_stairs"]
+albedo_color = Color(0.2, 0.4, 0.8, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_step"]
+size = Vector3(3, 0.27, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_step"]
+size = Vector3(3, 0.27, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_platform"]
+albedo_color = Color(0.2, 0.75, 0.35, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(14, 0.5, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(14, 0.5, 8)
+
+[sub_resource type="SphereMesh" id="Mesh_pickup"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="Shape_pickup"]
+radius = 0.25
+
+[sub_resource type="Resource" id="ObjectData_generico"]
+script = ExtResource("7_objdata")
+object_id = "objeto_generico_test"
+object_name = "Objeto Genérico"
+description = "Objeto de prueba sin tipo especial, usa PickupObject base."
+
+[sub_resource type="StandardMaterial3D" id="Mat_generico"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+
+[sub_resource type="Resource" id="ObjectData_llave"]
+script = ExtResource("7_objdata")
+object_id = "llave_test"
+object_name = "Llave de Prueba"
+description = "Llave usada para probar el desbloqueo de Door_Bloqueada."
+is_key_item = true
+
+[sub_resource type="StandardMaterial3D" id="Mat_llave"]
+albedo_color = Color(0.9, 0.85, 0.1, 1)
+
+[sub_resource type="Resource" id="ObjectData_documento"]
+script = ExtResource("7_objdata")
+object_id = "documento_test"
+object_name = "Documento de Prueba"
+description = "Documento usado para probar el registro de documentos en el Inventario."
+
+[sub_resource type="StandardMaterial3D" id="Mat_documento"]
+albedo_color = Color(0.9, 0.9, 0.75, 1)
+
+[sub_resource type="Resource" id="ObjectData_fotografia"]
+script = ExtResource("7_objdata")
+object_id = "fotografia_test"
+object_name = "Fotografía de Prueba"
+description = "Fotografía de prueba, recogible mediante PickupObject base."
+
+[sub_resource type="StandardMaterial3D" id="Mat_fotografia"]
+albedo_color = Color(0.7, 0.6, 0.9, 1)
+
+[sub_resource type="Resource" id="ObjectData_grabadora"]
+script = ExtResource("7_objdata")
+object_id = "grabadora_test"
+object_name = "Grabadora de Prueba"
+description = "Grabadora de voz usada para probar VoiceRecorderItem."
+
+[sub_resource type="StandardMaterial3D" id="Mat_grabadora"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+
+[sub_resource type="Resource" id="ObjectData_linterna"]
+script = ExtResource("7_objdata")
+object_id = "linterna_test"
+object_name = "Linterna de Prueba"
+description = "Linterna usada para probar FlashlightItem."
+
+[sub_resource type="StandardMaterial3D" id="Mat_linterna"]
+albedo_color = Color(0.95, 0.8, 0.2, 1)
+
+[sub_resource type="Resource" id="ObjectData_celular"]
+script = ExtResource("7_objdata")
+object_id = "celular_test"
+object_name = "Celular de Prueba"
+description = "Celular usado para probar PhoneItem."
+
+[sub_resource type="StandardMaterial3D" id="Mat_celular"]
+albedo_color = Color(0.15, 0.15, 0.2, 1)
+
+[sub_resource type="Resource" id="ObjectData_reloj"]
+script = ExtResource("7_objdata")
+object_id = "reloj_test"
+object_name = "Reloj de Prueba"
+description = "Reloj usado para probar WatchItem, ubicado sobre la plataforma elevada."
+
+[sub_resource type="StandardMaterial3D" id="Mat_reloj"]
+albedo_color = Color(0.2, 0.7, 0.9, 1)
+
+[sub_resource type="Resource" id="ObjectData_importante"]
+script = ExtResource("7_objdata")
+object_id = "objeto_importante_test"
+object_name = "Objeto Importante de Prueba"
+description = "Objeto usado para probar ImportantItem (sin evento vinculado, ya que no existe EventManager en esta escena)."
+
+[sub_resource type="StandardMaterial3D" id="Mat_importante"]
+albedo_color = Color(0.85, 0.15, 0.15, 1)
+
+[node name="TestScene_020A" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.3830222, -0.3213938, 0, 0.6427876, 0.7660444, 0.5, -0.6634139, 0.55667037, 0, 8, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = SubResource("Mat_ground")
+mesh = SubResource("BoxMesh_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Walls" type="Node3D" parent="."]
+
+[node name="Wall_North" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, -20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/Wall_North"]
+material_override = SubResource("Mat_wall")
+mesh = SubResource("BoxMesh_wall_ns")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/Wall_North"]
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="Wall_South" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 20)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/Wall_South"]
+material_override = SubResource("Mat_wall")
+mesh = SubResource("BoxMesh_wall_ns")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/Wall_South"]
+shape = SubResource("BoxShape3D_wall_ns")
+
+[node name="Wall_East" type="StaticBody3D" parent="Walls"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 3, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Walls/Wall_East"]
+material_override = SubResource("Mat_wall")
+mesh = SubResource("BoxMesh_wall_e")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/Wall_East"]
+shape = SubResource("BoxShape3D_wall_e")
+
+[node name="FallZoneMarker" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19, 0.5, 0)
+
+[node name="Ramp" type="StaticBody3D" parent="."]
+transform = Transform3D(0.9455186, 0.32556816, 0, -0.32556816, 0.9455186, 0, 0, 0, 1, 10, 1.2, -13)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ramp"]
+material_override = SubResource("Mat_ramp")
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ramp"]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="Stairs" type="Node3D" parent="."]
+
+[node name="Step_01" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.135, -1.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_01"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_01"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_02" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.405, -2.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_02"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_02"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_03" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.675, -3.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_03"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_03"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_04" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.945, -4.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_04"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_04"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_05" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.215, -5.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_05"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_05"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_06" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.485, -6.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_06"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_06"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_07" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1.755, -7.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_07"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_07"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_08" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.025, -8.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_08"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_08"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_09" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.295, -9.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_09"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_09"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_10" type="StaticBody3D" parent="Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 2.565, -10.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Stairs/Step_10"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stairs/Step_10"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Platform" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3, -13)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Platform"]
+material_override = SubResource("Mat_platform")
+mesh = SubResource("BoxMesh_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Platform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 15)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 15)
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -2.5)
+
+[node name="InteractionManager" type="Node3D" parent="."]
+script = ExtResource("4_interactionmgr")
+ray_cast = NodePath("../Player/CameraPivot/Camera3D/RayCast3D")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("5_inventory")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="InteractionPrompt" parent="HUD" instance=ExtResource("3_prompt")]
+layout_mode = 3
+anchors_preset = 7
+offset_top = -40.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Door_Abierta" parent="." instance=ExtResource("2_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 19.7)
+
+[node name="Door_Bloqueada" parent="." instance=ExtResource("2_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 19.7)
+key_id = "llave_test"
+starts_locked = true
+
+[node name="Pickup_Generico" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, 10)
+script = ExtResource("6_pickup")
+object_data = SubResource("ObjectData_generico")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Generico"]
+material_override = SubResource("Mat_generico")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Generico"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Llave" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.3, 10)
+script = ExtResource("8_key")
+object_data = SubResource("ObjectData_llave")
+unlocks_id = "puerta_bloqueada_test"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Llave"]
+material_override = SubResource("Mat_llave")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Llave"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Documento" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.3, 5)
+script = ExtResource("9_document")
+object_data = SubResource("ObjectData_documento")
+document_text = "Texto de prueba del documento, usado únicamente para validar el DocumentManager en la escena de pruebas."
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Documento"]
+material_override = SubResource("Mat_documento")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Documento"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Fotografia" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.3, 5)
+script = ExtResource("6_pickup")
+object_data = SubResource("ObjectData_fotografia")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Fotografia"]
+material_override = SubResource("Mat_fotografia")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Fotografia"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Grabadora" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, -5)
+script = ExtResource("11_recorder")
+object_data = SubResource("ObjectData_grabadora")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Grabadora"]
+material_override = SubResource("Mat_grabadora")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Grabadora"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Linterna" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.3, -5)
+script = ExtResource("10_flashlight")
+object_data = SubResource("ObjectData_linterna")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Linterna"]
+material_override = SubResource("Mat_linterna")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Linterna"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Celular" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.3, 2)
+script = ExtResource("12_phone")
+object_data = SubResource("ObjectData_celular")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Celular"]
+material_override = SubResource("Mat_celular")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Celular"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Reloj" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 3.55, -13)
+script = ExtResource("13_watch")
+object_data = SubResource("ObjectData_reloj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Reloj"]
+material_override = SubResource("Mat_reloj")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Reloj"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_ObjetoImportante" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0.3, 2)
+script = ExtResource("14_important")
+object_data = SubResource("ObjectData_importante")
+trigger_on_pickup = false
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_ObjetoImportante"]
+material_override = SubResource("Mat_importante")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_ObjetoImportante"]
+shape = SubResource("Shape_pickup")

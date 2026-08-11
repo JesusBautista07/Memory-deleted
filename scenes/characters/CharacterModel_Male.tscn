@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bbu5uandndda0" path="res://assets/models/characters/UniversalBaseCharacter_Male/Superhero_Male_FullBody.gltf" id="1_model"]
+[ext_resource type="Script" path="res://scripts/characters/character_variant.gd" id="2_variant_script"]
+
+[node name="CharacterModel_Male" type="Node3D"]
+script = ExtResource("2_variant_script")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Model")

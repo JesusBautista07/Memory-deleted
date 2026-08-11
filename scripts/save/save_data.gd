@@ -45,9 +45,15 @@ extends Resource
 
 
 ## Devuelve el tiempo jugado formateado como HH:MM:SS.
+## La división entera aquí es intencional (se busca el número de horas/
+## minutos completos, no una fracción), así que se silencia el warning
+## INTEGER_DIVISION de Godot 4 en vez de dejarlo aparecer: no es un bug,
+## es justo el comportamiento que se quiere.
 func get_formatted_played_time() -> String:
 	var total_seconds: int = int(played_time)
+	@warning_ignore("integer_division")
 	var hours: int = total_seconds / 3600
+	@warning_ignore("integer_division")
 	var minutes: int = (total_seconds % 3600) / 60
 	var seconds: int = total_seconds % 60
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]

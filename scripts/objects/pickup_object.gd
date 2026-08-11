@@ -20,6 +20,8 @@ func interact() -> void:
 	if object_data == null:
 		return
 
+	print("[020E] PickupObject.interact() -> ", object_data.object_id)
+
 	if not object_data.can_be_stored:
 		storage_rejected.emit(object_data, self)
 		return
@@ -70,8 +72,10 @@ func _send_to_inventory() -> void:
 	var inventory: Node = get_tree().get_first_node_in_group(INVENTORY_GROUP)
 
 	if inventory == null or not inventory.has_method("add_item"):
+		print("[020E] Objeto enviado al inventario -> SIN Inventory en la escena, rechazado")
 		sent_to_inventory.emit(object_data, self, false)
 		return
 
 	var accepted: bool = inventory.call("add_item", object_data, self)
+	print("[020E] Objeto enviado al inventario: ", object_data.object_id, " aceptado=", accepted)
 	sent_to_inventory.emit(object_data, self, accepted)

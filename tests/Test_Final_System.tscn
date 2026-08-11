@@ -1,0 +1,534 @@
+[gd_scene load_steps=75 format=3 uid="uid://ccquwcb2e02mx"]
+
+[ext_resource type="PackedScene" uid="uid://bp3a1kcre8lqb" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://dnb3spsbhw0p4" path="res://scenes/ui/hud/InteractionPrompt.tscn" id="2_prompt"]
+[ext_resource type="Script" uid="uid://c6vk8ceb7xd48" path="res://scripts/interaction/interaction_manager.gd" id="3_interactionmgr"]
+[ext_resource type="Script" uid="uid://d4c6oqk0y6y6r" path="res://scripts/inventory/inventory.gd" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponPickup_Pistol.tscn" id="6_pistol"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponPickup_Rifle.tscn" id="7_rifle"]
+[ext_resource type="PackedScene" uid="uid://c8a1b2c3d4e5f" path="res://scenes/objects/Door.tscn" id="9_door"]
+[ext_resource type="Script" uid="uid://80yxw6wnawxv" path="res://scripts/objects/pickup_object.gd" id="10_pickup"]
+[ext_resource type="Script" uid="uid://c36ae46xif0dt" path="res://scripts/objects/object_data.gd" id="11_objdata"]
+[ext_resource type="Script" uid="uid://dvxt0hh4mcj3s" path="res://scripts/objects/key_item.gd" id="12_key"]
+[ext_resource type="Script" uid="uid://yhcen0qq6g3o" path="res://scripts/objects/document_item.gd" id="13_document"]
+[ext_resource type="Script" uid="uid://bl3183w6suu0n" path="res://scripts/objects/flashlight_item.gd" id="14_flashlight"]
+[ext_resource type="Script" uid="uid://bqdy6cljbvj2r" path="res://scripts/documents/document_manager.gd" id="15_docmgr"]
+[ext_resource type="PackedScene" uid="uid://dbakg55nfan5m" path="res://scenes/ui/documents/DocumentsUI.tscn" id="16_documentsui"]
+[ext_resource type="PackedScene" uid="uid://dgaksrok6ieyo" path="res://scenes/ui/menu/PauseMenu.tscn" id="17_pausemenu"]
+[ext_resource type="Script" uid="uid://dk0vwogtatxdx" path="res://scripts/ui/hud/ammo_hud.gd" id="18_ammohud"]
+[ext_resource type="Script" uid="uid://bkft7xvg0rxmb" path="res://scripts/enemies/test_dummy.gd" id="19_dummy"]
+[ext_resource type="Script" uid="uid://gnr8jc3eb78d" path="res://scripts/objects/phone_item.gd" id="20_phone"]
+[ext_resource type="Script" uid="uid://b2ghd5poy62e0" path="res://scripts/objects/voice_recorder_item.gd" id="21_recorder"]
+[ext_resource type="Script" uid="uid://bj60wkx20708k" path="res://scripts/objects/important_item.gd" id="22_photo"]
+[ext_resource type="PackedScene" uid="uid://ddakgailldatl" path="res://scenes/ui/hud/Crosshair.tscn" id="23_crosshair"]
+[ext_resource type="PackedScene" path="res://scenes/characters/psx/PSXNPC_Monster.tscn" id="36_psx_npc_monster"]
+[ext_resource type="PackedScene" uid="uid://bbvpde2ar28no" path="res://assets/models/environment/buildings/Buildings.glb" id="40_buildings"]
+[ext_resource type="PackedScene" uid="uid://bxbohpx7y1ul6" path="res://assets/models/environment/trees/Trees.fbx" id="41_trees"]
+[ext_resource type="Script" uid="uid://sxdbwvf70myr" path="res://scripts/environment/navmesh_runtime_baker.gd" id="50_navbaker"]
+[ext_resource type="Script" uid="uid://smro3im6ide8" path="res://scripts/npc/npc_spawner.gd" id="51_spawner"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_PSXMale01.tscn" id="60_npc_male01"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_PSXMale02.tscn" id="61_npc_male02"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_PSXPolice17.tscn" id="62_npc_police17"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_PSXFemale02.tscn" id="63_npc_female02"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_PSXFemale03.tscn" id="64_npc_female03"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_UniversalMale.tscn" id="65_npc_universal_male"]
+[ext_resource type="PackedScene" path="res://scenes/characters/npc/NPCWanderer_UniversalFemale.tscn" id="66_npc_universal_female"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_lab"]
+
+[sub_resource type="Sky" id="Sky_lab"]
+sky_material = SubResource("SkyMaterial_lab")
+
+[sub_resource type="Environment" id="Environment_lab"]
+background_mode = 2
+sky = SubResource("Sky_lab")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+
+[sub_resource type="NavigationMesh" id="NavMesh_test_final"]
+geometry_parsed_geometry_type = 1
+cell_size = 0.2
+cell_height = 0.2
+agent_height = 1.8
+agent_radius = 0.4
+agent_max_climb = 0.4
+agent_max_slope = 55.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(400, 1, 400)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(400, 1, 400)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ramp"]
+albedo_color = Color(0.85, 0.5, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+size = Vector3(6, 0.3, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(6, 0.3, 4)
+
+[sub_resource type="StandardMaterial3D" id="Mat_stairs"]
+albedo_color = Color(0.2, 0.4, 0.8, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_step"]
+size = Vector3(3, 0.27, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_step"]
+size = Vector3(3, 0.27, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_platform"]
+albedo_color = Color(0.2, 0.75, 0.35, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+size = Vector3(6, 0.5, 6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(6, 0.5, 6)
+
+[sub_resource type="Resource" id="ObjectData_key"]
+script = ExtResource("11_objdata")
+object_id = "lab_key"
+object_name = "Llave de laboratorio"
+description = "Llave que abre la puerta bloqueada del laboratorio."
+is_key_item = true
+
+[sub_resource type="StandardMaterial3D" id="Mat_key"]
+albedo_color = Color(0.95, 0.85, 0.2, 1)
+
+[sub_resource type="SphereMesh" id="Mesh_pickup"]
+radius = 0.25
+height = 0.5
+
+[sub_resource type="SphereShape3D" id="Shape_pickup"]
+radius = 0.25
+
+[sub_resource type="Resource" id="ObjectData_document"]
+script = ExtResource("11_objdata")
+object_id = "lab_document"
+object_name = "Documento de prueba"
+description = "Documento de prueba para validar el flujo de lectura."
+
+[sub_resource type="StandardMaterial3D" id="Mat_document"]
+albedo_color = Color(0.9, 0.9, 0.85, 1)
+
+[sub_resource type="Resource" id="ObjectData_normal"]
+script = ExtResource("11_objdata")
+object_id = "lab_normal_object"
+object_name = "Objeto normal"
+description = "Objeto recogible simple, sin comportamiento especial. Test_Final_System (020E)."
+
+[sub_resource type="StandardMaterial3D" id="Mat_pickup"]
+albedo_color = Color(0.9, 0.75, 0.15, 1)
+
+[sub_resource type="Resource" id="ObjectData_flashlight"]
+script = ExtResource("11_objdata")
+object_id = "lab_flashlight"
+object_name = "Linterna"
+description = "Linterna de prueba."
+
+[sub_resource type="StandardMaterial3D" id="Mat_flashlight"]
+albedo_color = Color(0.3, 0.3, 0.3, 1)
+
+[sub_resource type="Resource" id="ObjectData_phone"]
+script = ExtResource("11_objdata")
+object_id = "lab_phone"
+object_name = "Celular"
+description = "Celular de prueba para validar el flujo de recogida."
+
+[sub_resource type="StandardMaterial3D" id="Mat_phone"]
+albedo_color = Color(0.1, 0.1, 0.1, 1)
+
+[sub_resource type="Resource" id="ObjectData_recorder"]
+script = ExtResource("11_objdata")
+object_id = "lab_recorder"
+object_name = "Grabadora"
+description = "Grabadora de voz de prueba para validar el flujo de recogida."
+
+[sub_resource type="StandardMaterial3D" id="Mat_recorder"]
+albedo_color = Color(0.4, 0.4, 0.45, 1)
+
+[sub_resource type="Resource" id="ObjectData_photo"]
+script = ExtResource("11_objdata")
+object_id = "lab_photo"
+object_name = "Fotografía"
+description = "Objeto importante de prueba (fotografía) para validar el flujo de recogida."
+
+[sub_resource type="StandardMaterial3D" id="Mat_photo"]
+albedo_color = Color(0.85, 0.8, 0.7, 1)
+
+[sub_resource type="StandardMaterial3D" id="Mat_dummy"]
+albedo_color = Color(0.6, 0.15, 0.15, 1)
+
+[sub_resource type="CapsuleMesh" id="Mesh_dummy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="Shape_dummy"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_diveboard"]
+albedo_color = Color(0.85, 0.2, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_diveboard"]
+size = Vector3(2, 0.3, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_diveboard"]
+size = Vector3(2, 0.3, 8)
+
+[sub_resource type="StandardMaterial3D" id="Mat_path"]
+albedo_color = Color(0.62, 0.52, 0.36, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_path_ns"]
+size = Vector3(4, 0.05, 130)
+
+[sub_resource type="BoxMesh" id="BoxMesh_path_ew"]
+size = Vector3(130, 0.05, 4)
+
+[node name="Test_Final_System" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lab")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.3830222, -0.3213938, 0, 0.6427876, 0.7660444, 0.5, -0.6634139, 0.55667037, 0, 8, 0)
+shadow_enabled = true
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavMesh_test_final")
+script = ExtResource("50_navbaker")
+
+[node name="Floor" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Floor"]
+material_override = SubResource("Mat_ground")
+mesh = SubResource("BoxMesh_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Floor"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="Ramp" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(0.9701425, 0.24253564, 0, -0.24253564, 0.9701425, 0, 0, 0, 1, 10, 1, -9)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Ramp"]
+material_override = SubResource("Mat_ramp")
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Ramp"]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="Stairs" type="Node3D" parent="NavigationRegion3D"]
+
+[node name="Step_01" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.135, -6.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_01"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_01"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_02" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.405, -7.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_02"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_02"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_03" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.675, -8.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_03"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_03"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_04" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0.945, -9.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_04"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_04"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_05" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.215, -10.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_05"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_05"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Step_06" type="StaticBody3D" parent="NavigationRegion3D/Stairs"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.485, -11.5)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Stairs/Step_06"]
+material_override = SubResource("Mat_stairs")
+mesh = SubResource("BoxMesh_step")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Stairs/Step_06"]
+shape = SubResource("BoxShape3D_step")
+
+[node name="Platform" type="StaticBody3D" parent="NavigationRegion3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1.87, -14)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D/Platform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45411968, -0.11968291, -0.97504425)
+material_override = SubResource("Mat_platform")
+mesh = SubResource("BoxMesh_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="NavigationRegion3D/Platform"]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 0.99249077, -0.122319736, 0, 0.122319736, 0.99249077, -0.085791945, 1.0151955, -0.09016085)
+
+[node name="InteractionManager" type="Node3D" parent="."]
+script = ExtResource("3_interactionmgr")
+ray_cast = NodePath("../Player/CameraPivot/Camera3D/RayCast3D")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("4_inventory")
+
+[node name="DocumentManager" type="Node" parent="."]
+script = ExtResource("15_docmgr")
+
+[node name="PauseMenu" parent="." instance=ExtResource("17_pausemenu")]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="Crosshair" parent="HUD" instance=ExtResource("23_crosshair")]
+layout_mode = 3
+anchors_preset = 8
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="InteractionPrompt" parent="HUD" instance=ExtResource("2_prompt")]
+layout_mode = 3
+anchors_preset = 8
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 34.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DocumentsUI" parent="HUD" instance=ExtResource("16_documentsui")]
+layout_mode = 3
+anchors_preset = 15
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AmmoHud" type="Label" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 260.0
+offset_bottom = 40.0
+script = ExtResource("18_ammohud")
+weapon_combat = NodePath("../../Player/CameraPivot/Camera3D/WeaponCombat")
+
+[node name="Door_Normal" parent="." instance=ExtResource("9_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -5)
+
+[node name="Door_WithKey" parent="." instance=ExtResource("9_door")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -5)
+key_id = "lab_key"
+starts_locked = true
+
+[node name="Key_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.3, -2)
+script = ExtResource("12_key")
+unlocks_id = "lab_key"
+object_data = SubResource("ObjectData_key")
+interaction_prompt = "[E] Recoger llave"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Key_Lab"]
+material_override = SubResource("Mat_key")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Key_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="Document_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0.3, 2)
+script = ExtResource("13_document")
+document_text = "Registro de laboratorio: si puedes leer esto, el flujo Jugador -> RayCast -> InteractionManager -> Prompt -> Interaccion -> Objeto -> Inventario -> Documento funciona correctamente."
+object_data = SubResource("ObjectData_document")
+interaction_prompt = "[E] Leer documento"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Document_Lab"]
+material_override = SubResource("Mat_document")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Document_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="Pickup_Normal" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.3, 2)
+script = ExtResource("10_pickup")
+object_data = SubResource("ObjectData_normal")
+interaction_prompt = "[E] Recoger objeto"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Pickup_Normal"]
+material_override = SubResource("Mat_pickup")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pickup_Normal"]
+shape = SubResource("Shape_pickup")
+
+[node name="Flashlight_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 2)
+script = ExtResource("14_flashlight")
+object_data = SubResource("ObjectData_flashlight")
+interaction_prompt = "[E] Recoger linterna"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Flashlight_Lab"]
+material_override = SubResource("Mat_flashlight")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Flashlight_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="WeaponPickup_Pistol" parent="." instance=ExtResource("6_pistol")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.3, 5)
+interaction_prompt = "[E] Recoger pistola"
+
+[node name="WeaponPickup_Rifle" parent="." instance=ExtResource("7_rifle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.3, 5)
+interaction_prompt = "[E] Recoger rifle"
+
+[node name="Phone_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0.3, 3)
+script = ExtResource("20_phone")
+object_data = SubResource("ObjectData_phone")
+interaction_prompt = "[E] Recoger celular"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Phone_Lab"]
+material_override = SubResource("Mat_phone")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Phone_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="Recorder_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0.3, 3)
+script = ExtResource("21_recorder")
+object_data = SubResource("ObjectData_recorder")
+interaction_prompt = "[E] Recoger grabadora"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Recorder_Lab"]
+material_override = SubResource("Mat_recorder")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Recorder_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="Photo_Lab" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.3, 3)
+script = ExtResource("22_photo")
+trigger_on_pickup = false
+object_data = SubResource("ObjectData_photo")
+interaction_prompt = "[E] Recoger fotografia"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Photo_Lab"]
+material_override = SubResource("Mat_photo")
+mesh = SubResource("Mesh_pickup")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Photo_Lab"]
+shape = SubResource("Shape_pickup")
+
+[node name="TestDummy" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1.3, 8)
+script = ExtResource("19_dummy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestDummy"]
+material_override = SubResource("Mat_dummy")
+mesh = SubResource("Mesh_dummy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestDummy"]
+shape = SubResource("Shape_dummy")
+
+[node name="PSXNPC_Monster" parent="." instance=ExtResource("36_psx_npc_monster")]
+transform = Transform3D(1, 0, 0, 0, 0.9997277, -0.023332935, 0, 0.023332935, 0.9997277, -10.470279, 0.029274464, -5.2767725)
+movement_enabled = false
+
+[node name="NPCSpawner" type="Node3D" parent="."]
+script = ExtResource("51_spawner")
+npc_scenes = Array[PackedScene]([ExtResource("60_npc_male01"), ExtResource("61_npc_male02"), ExtResource("62_npc_police17"), ExtResource("63_npc_female02"), ExtResource("64_npc_female03"), ExtResource("65_npc_universal_male"), ExtResource("66_npc_universal_female")])
+spawning_enabled = false
+navmesh_source = NodePath("../NavigationRegion3D")
+player_path = NodePath("../Player")
+
+[node name="DiveBoard" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -16)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="DiveBoard"]
+material_override = SubResource("Mat_diveboard")
+mesh = SubResource("BoxMesh_diveboard")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DiveBoard"]
+shape = SubResource("BoxShape3D_diveboard")
+
+[node name="Environment_Forest" type="Node3D" parent="."]
+
+[node name="Trees_01" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 0, 60)
+
+[node name="Trees_02" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -70, 0, -60)
+
+[node name="Trees_03" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 90, 0, -20)
+
+[node name="Trees_04" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(4.371139e-08, 0, 1, 0, 1, 0, -1, 0, 4.371139e-08, -40, 0, 80)
+
+[node name="Trees_05" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(0.70710677, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, 0.70710677, 25, 0, -110)
+
+[node name="Trees_06" parent="Environment_Forest" instance=ExtResource("41_trees")]
+transform = Transform3D(-0.70710677, 0, 0.7071068, 0, 1, 0, -0.7071068, 0, -0.70710677, -100, 0, 20)
+
+[node name="Environment_Buildings" type="Node3D" parent="."]
+
+[node name="Buildings_01" parent="Environment_Buildings" instance=ExtResource("40_buildings")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, 0, -90)
+
+[node name="Buildings_02" parent="Environment_Buildings" instance=ExtResource("40_buildings")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -100, 0, 110)
+
+[node name="Environment_Paths" type="Node3D" parent="."]
+
+[node name="Path_North" type="MeshInstance3D" parent="Environment_Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, -50)
+material_override = SubResource("Mat_path")
+mesh = SubResource("BoxMesh_path_ns")
+
+[node name="Path_West" type="MeshInstance3D" parent="Environment_Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0.02, 15)
+material_override = SubResource("Mat_path")
+mesh = SubResource("BoxMesh_path_ew")
+
+[node name="Path_East" type="MeshInstance3D" parent="Environment_Paths"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0.02, -30)
+material_override = SubResource("Mat_path")
+mesh = SubResource("BoxMesh_path_ew")

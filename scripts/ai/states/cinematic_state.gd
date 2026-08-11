@@ -1,4 +1,4 @@
-class_name CinematicState
+class_name AICinematicState
 extends AIState
 
 

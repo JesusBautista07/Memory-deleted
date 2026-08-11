@@ -267,5 +267,6 @@ func _try_step_up() -> void:
 
 func _check_fall_reset() -> void:
 	if enable_fall_reset and global_position.y < fall_reset_y:
+		print("[020E] Respawn ejecutado")
 		velocity = Vector3.ZERO
 		global_position = respawn_position

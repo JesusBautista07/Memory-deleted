@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/characters/CharacterModel_Male.tscn" id="1_base"]
+
+[node name="Male_Variant_PielMedia_SinPelo" instance=ExtResource("1_base")]
+skin_tint = Color(0.75, 0.55, 0.42, 1)
+hair_tint = Color(1, 1, 1, 1)
+hair_visible = false

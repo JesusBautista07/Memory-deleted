@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/characters/psx/Female/Character_Female_02.fbx" id="1_model"]
+[ext_resource type="Script" path="res://scripts/npc/npc_wanderer.gd" id="2_wanderer"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_female02"]
+radius = 0.33
+height = 1.7
+
+[node name="NPCWanderer_PSXFemale02" type="CharacterBody3D"]
+script = ExtResource("2_wanderer")
+character_kind = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_female02")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(0.371, 0, 0, 0, 0.371, 0, 0, 0, 0.371, 0, -0.85, 0)
+
+[node name="AnimPlayer" type="AnimationPlayer" parent="."]
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

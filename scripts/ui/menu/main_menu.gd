@@ -1,5 +1,5 @@
 extends Control
-## Menú principal. Navega a Test_Player.tscn, o muestra Ajustes/Créditos
+## Menú principal. Navega a test_player.tscn, o muestra Ajustes/Créditos
 ## como overlays. No depende de ningún otro sistema del proyecto.
 
 @onready var _button_new_game: Button = %ButtonNewGame
@@ -25,7 +25,7 @@ func _ready() -> void:
 
 
 func _on_new_game_pressed() -> void:
-	get_tree().change_scene_to_file("res://tests/Test_Player.tscn")
+	get_tree().change_scene_to_file("res://tests/test_player.tscn")
 
 
 func _on_settings_pressed() -> void:

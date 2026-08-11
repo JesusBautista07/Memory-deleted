@@ -26,6 +26,8 @@ func add_item(object_data: ObjectData, source: PickupObject = null) -> bool:
 	if has_item(object_data.object_id):
 		return false
 
+	print("[020E] Inventory.add_item() -> ", object_data.object_id)
+
 	_items.append(object_data)
 	item_added.emit(object_data)
 	inventory_changed.emit(get_items())
@@ -65,6 +67,18 @@ func is_document(object_id: String) -> bool:
 
 func get_document_ids() -> Array[String]:
 	return _document_ids.duplicate()
+
+## Añadido en el Ticket 020E: devuelve los object_id de todos los objetos
+## marcados como is_key_item = true que el jugador tiene actualmente. Es lo
+## que consume Door._get_available_key_ids() para poder abrir puertas
+## bloqueadas desde el flujo real del juego (antes solo funcionaba en el
+## script de pruebas test_door_sandbox.gd, que simulaba las llaves a mano).
+func get_key_ids() -> Array:
+	var key_ids: Array = []
+	for data in _items:
+		if data != null and data.is_key_item:
+			key_ids.append(data.object_id)
+	return key_ids
 
 func _register_document(object_data: ObjectData, source: PickupObject) -> void:
 	if _document_ids.has(object_data.object_id):

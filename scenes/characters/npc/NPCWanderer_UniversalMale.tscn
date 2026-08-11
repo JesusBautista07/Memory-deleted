@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bbu5uandndda0" path="res://assets/models/characters/UniversalBaseCharacter_Male/Superhero_Male_FullBody.gltf" id="1_model"]
+[ext_resource type="Script" path="res://scripts/npc/npc_wanderer.gd" id="2_wanderer"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_universal_male"]
+radius = 0.4
+height = 1.8
+
+[node name="NPCWanderer_UniversalMale" type="CharacterBody3D"]
+script = ExtResource("2_wanderer")
+character_kind = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_universal_male")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9, 0)
+
+[node name="AnimPlayer" type="AnimationPlayer" parent="."]
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]

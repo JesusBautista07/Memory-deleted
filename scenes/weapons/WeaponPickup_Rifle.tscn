@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_item.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="2_data"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponViewModel_Rifle.tscn" id="3_viewmodel"]
+
+[sub_resource type="Resource" id="WeaponData_rifle"]
+script = ExtResource("2_data")
+object_id = "rifle_test"
+object_name = "Rifle de Prueba"
+description = "Arma de prueba para validar el cambio entre varias armas equipadas. Todavía sin disparo ni daño."
+view_model_scene = ExtResource("3_viewmodel")
+weapon_slot = "secondary"
+
+[sub_resource type="StandardMaterial3D" id="Mat_pickup_rifle"]
+albedo_color = Color(0.25, 0.2, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pickup_rifle"]
+size = Vector3(0.35, 0.22, 0.9)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pickup_rifle"]
+size = Vector3(0.35, 0.22, 0.9)
+
+[node name="WeaponPickup_Rifle" type="StaticBody3D"]
+script = ExtResource("1_script")
+object_data = SubResource("WeaponData_rifle")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("Mat_pickup_rifle")
+mesh = SubResource("BoxMesh_pickup_rifle")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pickup_rifle")

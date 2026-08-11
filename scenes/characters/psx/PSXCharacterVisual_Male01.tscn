@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/characters/psx/Male/Character_01.fbx" id="1_model"]
+[ext_resource type="Script" path="res://scripts/characters/psx/psx_character_controller.gd" id="2_controller"]
+
+[node name="PSXCharacterVisual_Male01" type="Node3D"]
+script = ExtResource("2_controller")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+scale = Vector3(0.383, 0.383, 0.383)
+
+[node name="RetargetedAnimationPlayer" type="AnimationPlayer" parent="."]

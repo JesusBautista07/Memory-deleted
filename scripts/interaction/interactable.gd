@@ -13,7 +13,7 @@ enum InteractionType {
 
 signal interacted(interactor: Object)
 
-@export var interaction_prompt: String = "Presiona E"
+@export var interaction_prompt: String = "[E] Interactuar"
 @export var can_interact: bool = true
 @export var interaction_type: InteractionType = InteractionType.NONE
 @export var interaction_id: String = ""

@@ -1,17 +1,25 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp3a1kcre8lqb"]
+[gd_scene load_steps=6 format=3 uid="uid://bp3a1kcre8lqb"]
 
 [ext_resource type="Script" uid="uid://egmyyo5lvhl8" path="res://scripts/player/player_movement.gd" id="1_movement"]
-[ext_resource type="Script" uid="uid://bylxa6wjmaxtx" path="res://scripts/camera/camera_controller.gd" id="2_camera"]
+[ext_resource type="Script" uid="uid://hgm4mhvxvwoq" path="res://scripts/camera/camera_controller.gd" id="2_camera"]
+[ext_resource type="PackedScene" path="res://scenes/characters/variants/Male_Variant_PielMedia_CabelloNegro.tscn" id="3_character_visual"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_body"]
 radius = 0.4
 height = 1.8
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_third_person_cam"]
+radius = 0.25
+
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_movement")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+visible = false
 shape = SubResource("CapsuleShape3D_body")
+
+[node name="CharacterVisual" parent="." instance=ExtResource("3_character_visual")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -0.9, 0)
 
 [node name="CameraPivot" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
@@ -19,3 +27,13 @@ script = ExtResource("2_camera")
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot"]
 current = true
+
+[node name="ThirdPersonPitch" type="Node3D" parent="CameraPivot"]
+
+[node name="ThirdPersonRig" type="SpringArm3D" parent="CameraPivot/ThirdPersonPitch"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.45, 0, 0)
+shape = SubResource("SphereShape3D_third_person_cam")
+spring_length = 2.5
+margin = 0.25
+
+[node name="ThirdPersonCamera" type="Camera3D" parent="CameraPivot/ThirdPersonPitch/ThirdPersonRig"]

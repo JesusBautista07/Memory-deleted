@@ -19,9 +19,16 @@ extends Resource
 
 
 ## Devuelve el tiempo jugado formateado como HH:MM:SS.
+## División entera intencional (horas/minutos completos): se silencia el
+## warning INTEGER_DIVISION de Godot 4 en vez de dejarlo aparecer, igual
+## que en SaveData.get_formatted_played_time() (misma lógica duplicada
+## aquí porque SaveSlot es la versión "ligera" para listar partidas sin
+## cargar el SaveData completo).
 func get_formatted_played_time() -> String:
 	var total_seconds: int = int(played_time)
+	@warning_ignore("integer_division")
 	var hours: int = total_seconds / 3600
+	@warning_ignore("integer_division")
 	var minutes: int = (total_seconds % 3600) / 60
 	var seconds: int = total_seconds % 60
 	return "%02d:%02d:%02d" % [hours, minutes, seconds]

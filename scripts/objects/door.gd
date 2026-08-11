@@ -37,6 +37,8 @@ func _ready() -> void:
 ## a esta función pasando las llaves que el jugador posee (desde Inventario).
 ## available_keys: Array de Strings con los IDs de llaves del jugador.
 func try_open(available_keys: Array = []) -> bool:
+	print("[020E] Door.try_open() llaves disponibles=", available_keys, " requiere=", key_id)
+
 	if _state == State.OPEN or _state == State.OPENING:
 		close()
 		return true
@@ -45,6 +47,7 @@ func try_open(available_keys: Array = []) -> bool:
 		if key_id != "" and available_keys.has(key_id):
 			unlock()
 		else:
+			print("[020E] Puerta bloqueada (falta llave: ", key_id, ")")
 			door_locked.emit(key_id)
 			return false
 
@@ -88,6 +91,7 @@ func unlock() -> void:
 
 func _on_open_finished() -> void:
 	_state = State.OPEN
+	print("[020E] Puerta abierta")
 	door_opened.emit()
 	if triggers_event:
 		event_triggered.emit(event_name)
@@ -103,3 +107,49 @@ func _play_sound(stream: AudioStream) -> void:
 		return
 	audio_player.stream = stream
 	audio_player.play()
+
+
+# ---------------------------------------------------------------------------
+# INTEGRACIÓN CON EL SISTEMA OFICIAL DE INTERACCIÓN
+# ---------------------------------------------------------------------------
+# InteractionManager (scripts/interaction/interaction_manager.gd) detecta
+# con el RayCast el StaticBody3D hijo (DoorPivot/DoorStaticBody) y, si ese
+# collider no tiene interact(), sube por sus antepasados hasta encontrarlo.
+# Como este script (Door, nodo raíz) es antepasado de DoorStaticBody, basta
+# con implementar aquí interact() y get_interaction_prompt() para que la
+# puerta quede interactuable en cualquier escena donde se instancie
+# Door.tscn, sin scripts "puente" añadidos a mano por escena.
+#
+# --- CORRECCIÓN TICKET 020E ---
+# interact() llamaba a try_open() SIN argumentos, así que available_keys
+# llegaba siempre vacío ([] por defecto) y una puerta bloqueada jamás podía
+# abrirse desde el flujo real de juego, aunque el jugador tuviera la llave
+# correcta en el Inventory (solo test_door_sandbox.gd, un script exclusivo
+# de pruebas, pasaba las llaves manualmente). Ahora interact() reúne los
+# IDs de llave del Inventory existente (localizándolo por grupo, mismo
+# patrón que usan PickupObject y WeaponManager) antes de llamar a try_open().
+
+const INVENTORY_GROUP := "inventory"
+
+func interact() -> void:
+	try_open(_get_available_key_ids())
+
+
+## Reúne los object_id de todos los objetos-llave (is_key_item = true) que
+## el jugador tiene actualmente en el Inventory. Devuelve un array vacío si
+## no hay Inventory en la escena o si todavía no expone get_key_ids().
+func _get_available_key_ids() -> Array:
+	var inventory: Node = get_tree().get_first_node_in_group(INVENTORY_GROUP)
+
+	if inventory == null or not inventory.has_method("get_key_ids"):
+		return []
+
+	return inventory.call("get_key_ids")
+
+
+func get_interaction_prompt() -> String:
+	if is_locked:
+		return "Puerta bloqueada"
+	if _state == State.OPEN or _state == State.OPENING:
+		return "[E] Cerrar puerta"
+	return "[E] Abrir puerta"

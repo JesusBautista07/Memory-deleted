@@ -54,7 +54,17 @@ layout_mode = 2
 autowrap_mode = 3
 text = ""
 
-[node name="ButtonClose" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer"]
+[node name="ButtonRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="ButtonUse" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ButtonRow"]
+unique_name_in_owner = true
+disabled = true
+layout_mode = 2
+text = "Usar"
+
+[node name="ButtonClose" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/ButtonRow"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cerrar"

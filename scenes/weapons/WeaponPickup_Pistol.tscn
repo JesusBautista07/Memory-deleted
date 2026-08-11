@@ -1,0 +1,33 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/weapons/weapon_item.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_data.gd" id="2_data"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponViewModel_Pistol.tscn" id="3_viewmodel"]
+
+[sub_resource type="Resource" id="WeaponData_pistol"]
+script = ExtResource("2_data")
+object_id = "pistol_test"
+object_name = "Pistola de Prueba"
+description = "Arma de prueba para validar recoger / guardar en Inventory / equipar. Todavía sin disparo ni daño."
+view_model_scene = ExtResource("3_viewmodel")
+weapon_slot = "primary"
+
+[sub_resource type="StandardMaterial3D" id="Mat_pickup_pistol"]
+albedo_color = Color(0.15, 0.15, 0.18, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_pickup_pistol"]
+size = Vector3(0.3, 0.2, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pickup_pistol"]
+size = Vector3(0.3, 0.2, 0.5)
+
+[node name="WeaponPickup_Pistol" type="StaticBody3D"]
+script = ExtResource("1_script")
+object_data = SubResource("WeaponData_pistol")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("Mat_pickup_pistol")
+mesh = SubResource("BoxMesh_pickup_pistol")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_pickup_pistol")

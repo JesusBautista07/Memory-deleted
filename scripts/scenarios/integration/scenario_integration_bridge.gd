@@ -113,7 +113,7 @@ func _handle_scene_changed(previous_id: String, new_id: String) -> void:
 	_on_scenario_changed(previous_id, new_id)
 
 
-func _handle_scene_state_changed(scene_id: String, state: SceneState.State) -> void:
+func _handle_scene_state_changed(scene_id: String, state: GameSceneState.State) -> void:
 	_on_scenario_state_changed(scene_id, state)
 
 
@@ -161,7 +161,7 @@ func _on_scenario_changed(_previous_id: String, _new_id: String) -> void:
 	pass
 
 
-func _on_scenario_state_changed(_scene_id: String, _state: SceneState.State) -> void:
+func _on_scenario_state_changed(_scene_id: String, _state: GameSceneState.State) -> void:
 	pass
 
 

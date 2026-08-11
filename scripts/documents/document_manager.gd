@@ -128,7 +128,7 @@ func _connect_inventory() -> void:
 	if inventory.has_signal("document_registered"):
 		inventory.document_registered.connect(_on_document_registered_in_inventory)
 
-func _on_document_registered_in_inventory(object_data: ObjectData, _source: Node) -> void:
+func _on_document_registered_in_inventory(object_data: ObjectData, source: Node) -> void:
 	if object_data == null:
 		return
 	if _documents_by_id.has(object_data.object_id):
@@ -138,6 +138,21 @@ func _on_document_registered_in_inventory(object_data: ObjectData, _source: Node
 	doc.document_id = object_data.object_id
 	doc.title = object_data.object_name
 	doc.note = object_data.description
+
+	# CORRECCIÓN (auditoría Test_Final_System): el texto real del
+	# documento vive en DocumentItem.document_text (el pickup del mundo),
+	# no en el ObjectData compartido que recibe el Inventory. Antes no se
+	# copiaba aquí, así que pages quedaba vacío y open_document() siempre
+	# mostraba una página en blanco pese a que el documento sí se leía
+	# como "registrado". Se usa el propio "source" que ya viaja en la
+	# señal document_registered (es un DocumentItem siempre que
+	# Inventory._register_document lo dispara) en vez de crear un canal
+	# nuevo.
+	if source is DocumentItem:
+		var text: String = (source as DocumentItem).get_document_text()
+		if not text.is_empty():
+			doc.pages = [text]
+
 	register_document(doc)
 
 func _mark_as_read(document_data: DocumentData) -> void:

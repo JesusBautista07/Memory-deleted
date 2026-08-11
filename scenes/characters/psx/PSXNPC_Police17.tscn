@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/characters/psx/Male/Character_17_Police.fbx" id="1_model"]
+[ext_resource type="Script" path="res://scripts/characters/psx/psx_npc_test_walker.gd" id="2_walker"]
+
+[node name="PSXNPC_Police17" type="Node3D"]
+script = ExtResource("2_walker")
+
+[node name="Model" parent="." instance=ExtResource("1_model")]
+scale = Vector3(0.388, 0.388, 0.388)
+
+[node name="RetargetedAnimationPlayer" type="AnimationPlayer" parent="."]

@@ -8,7 +8,7 @@ signal scene_load_failed(scene_id: String, error: String)
 signal scene_unload_started(scene_id: String)
 signal scene_unloaded(scene_id: String)
 signal scene_changed(previous_id: String, new_id: String)
-signal scene_state_changed(scene_id: String, state: SceneState.State)
+signal scene_state_changed(scene_id: String, state: GameSceneState.State)
 signal scene_reset(scene_id: String)
 signal scene_reloaded(scene_id: String)
 
@@ -25,7 +25,7 @@ var _next_scene_id: String = ""
 var _scene_history: Array[String] = []
 
 var _current_instance: Node
-var _current_state: SceneState.State = SceneState.State.NOT_LOADED
+var _current_state: GameSceneState.State = GameSceneState.State.NOT_LOADED
 var _container: Node
 
 
@@ -79,20 +79,20 @@ func get_next_scene_id() -> String:
 	return _next_scene_id
 
 
-func get_current_state() -> SceneState.State:
+func get_current_state() -> GameSceneState.State:
 	return _current_state
 
 
-func is_in_state(state: SceneState.State) -> bool:
+func is_in_state(state: GameSceneState.State) -> bool:
 	return _current_state == state
 
 
 func has_active_scenario() -> bool:
-	return _current_state == SceneState.State.ACTIVE and not _current_scene_id.is_empty()
+	return _current_state == GameSceneState.State.ACTIVE and not _current_scene_id.is_empty()
 
 
 func is_scenario_active(scene_id: String) -> bool:
-	return _current_scene_id == scene_id and _current_state == SceneState.State.ACTIVE
+	return _current_scene_id == scene_id and _current_state == GameSceneState.State.ACTIVE
 
 
 func get_scene_history() -> Array[String]:
@@ -107,7 +107,7 @@ func get_scenario_info(scene_id: String) -> SceneInfo:
 	var data: SceneData = get_scenario_data(scene_id)
 	if data == null:
 		return null
-	var state: SceneState.State = _current_state if scene_id == _current_scene_id else SceneState.State.NOT_LOADED
+	var state: GameSceneState.State = _current_state if scene_id == _current_scene_id else GameSceneState.State.NOT_LOADED
 	return SceneInfo.from_scene_data(data, state)
 
 
@@ -124,16 +124,16 @@ func load_scenario(scene_id: String, force: bool = false) -> void:
 		scene_load_failed.emit(scene_id, "Escenario no registrado: %s" % scene_id)
 		return
 
-	_set_state(SceneState.State.LOADING)
+	_set_state(GameSceneState.State.LOADING)
 	var instance: Node = _loader.load_scene(data)
 	if instance == null:
-		_set_state(SceneState.State.NOT_LOADED)
+		_set_state(GameSceneState.State.NOT_LOADED)
 		return
 
 	if _container == null:
 		scene_load_failed.emit(scene_id, "No hay contenedor válido para el escenario")
 		instance.queue_free()
-		_set_state(SceneState.State.NOT_LOADED)
+		_set_state(GameSceneState.State.NOT_LOADED)
 		return
 
 	_container.add_child(instance)
@@ -142,7 +142,7 @@ func load_scenario(scene_id: String, force: bool = false) -> void:
 	_previous_scene_id = _current_scene_id
 	_current_scene_id = scene_id
 	_scene_history.append(scene_id)
-	_set_state(SceneState.State.ACTIVE)
+	_set_state(GameSceneState.State.ACTIVE)
 	scene_changed.emit(_previous_scene_id, _current_scene_id)
 
 
@@ -153,11 +153,11 @@ func unload_scenario() -> void:
 		return
 
 	var scene_id: String = _current_scene_id
-	_set_state(SceneState.State.UNLOADING)
+	_set_state(GameSceneState.State.UNLOADING)
 	_loader.unload_scene(scene_id, _current_instance)
 	_current_instance = null
 	_current_scene_id = ""
-	_set_state(SceneState.State.NOT_LOADED)
+	_set_state(GameSceneState.State.NOT_LOADED)
 
 
 func change_scenario(scene_id: String, force: bool = false) -> void:
@@ -191,28 +191,28 @@ func reload_scenario() -> void:
 
 
 func pause_scenario() -> void:
-	if _current_state != SceneState.State.ACTIVE:
+	if _current_state != GameSceneState.State.ACTIVE:
 		return
-	_set_state(SceneState.State.PAUSED)
+	_set_state(GameSceneState.State.PAUSED)
 
 
 func resume_scenario() -> void:
-	if _current_state != SceneState.State.PAUSED:
+	if _current_state != GameSceneState.State.PAUSED:
 		return
-	_set_state(SceneState.State.ACTIVE)
+	_set_state(GameSceneState.State.ACTIVE)
 
 
 func finish_scenario() -> void:
-	if _current_state != SceneState.State.ACTIVE and _current_state != SceneState.State.PAUSED:
+	if _current_state != GameSceneState.State.ACTIVE and _current_state != GameSceneState.State.PAUSED:
 		return
-	_set_state(SceneState.State.FINISHED)
+	_set_state(GameSceneState.State.FINISHED)
 
 
 func _is_busy() -> bool:
-	return _current_state == SceneState.State.LOADING or _current_state == SceneState.State.UNLOADING
+	return _current_state == GameSceneState.State.LOADING or _current_state == GameSceneState.State.UNLOADING
 
 
-func _set_state(state: SceneState.State) -> void:
+func _set_state(state: GameSceneState.State) -> void:
 	_current_state = state
 	scene_state_changed.emit(_current_scene_id, state)
 

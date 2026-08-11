@@ -1,0 +1,36 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/character_variants_test.gd" id="1_test_script"]
+[ext_resource type="PackedScene" path="res://scenes/characters/variants/Male_Variant_PielClara_CabelloCastano.tscn" id="2_variant_a"]
+[ext_resource type="PackedScene" path="res://scenes/characters/variants/Male_Variant_PielMedia_CabelloNegro.tscn" id="3_variant_b"]
+[ext_resource type="PackedScene" path="res://scenes/characters/variants/Male_Variant_PielOscura_CabelloRubio.tscn" id="4_variant_c"]
+[ext_resource type="PackedScene" path="res://scenes/characters/variants/Male_Variant_PielMedia_SinPelo.tscn" id="5_variant_d"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_floor"]
+size = Vector2(10, 6)
+
+[node name="CharacterVariants_TestScene" type="Node3D"]
+script = ExtResource("1_test_script")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8, -0.35, 0.48, 0, 0.8, 0.6, -0.6, -0.48, 0.64, 0, 3, 0)
+shadow_enabled = true
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_floor")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.96, 0.28, 0, -0.28, 0.96, 0, 1.6, 4.5)
+current = true
+
+[node name="Variant_A_PielClara_CabelloCastano" parent="." instance=ExtResource("2_variant_a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.25, 0, 0)
+
+[node name="Variant_B_PielMedia_CabelloNegro" parent="." instance=ExtResource("3_variant_b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.75, 0, 0)
+
+[node name="Variant_C_PielOscura_CabelloRubio" parent="." instance=ExtResource("4_variant_c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.75, 0, 0)
+
+[node name="Variant_D_PielMedia_SinPelo" parent="." instance=ExtResource("5_variant_d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 0, 0)

@@ -33,7 +33,7 @@ signal scene_load_failed(scene_id: String, error: String)
 signal scene_unload_started(scene_id: String)
 signal scene_unloaded(scene_id: String)
 signal scene_changed(previous_id: String, new_id: String)
-signal scene_state_changed(scene_id: String, state: SceneState.State)
+signal scene_state_changed(scene_id: String, state: GameSceneState.State)
 signal scene_reset(scene_id: String)
 signal scene_reloaded(scene_id: String)
 
@@ -174,7 +174,7 @@ func _on_scene_changed(previous_id: String, new_id: String) -> void:
 	scenario_event.emit(&"scene_changed", {"previous_id": previous_id, "new_id": new_id})
 
 
-func _on_scene_state_changed(scene_id: String, state: SceneState.State) -> void:
+func _on_scene_state_changed(scene_id: String, state: GameSceneState.State) -> void:
 	scene_state_changed.emit(scene_id, state)
 	scenario_event.emit(&"scene_state_changed", {"scene_id": scene_id, "state": state})
 

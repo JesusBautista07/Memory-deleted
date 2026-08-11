@@ -1,0 +1,120 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="PackedScene" uid="uid://bp3a1kcre8lqb" path="res://scenes/player/Player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://bxq1a2interact" path="res://scenes/ui/hud/InteractionPrompt.tscn" id="2_prompt"]
+[ext_resource type="Script" uid="uid://c6vk8ceb7xd48" path="res://scripts/interaction/interaction_manager.gd" id="3_interactionmgr"]
+[ext_resource type="Script" uid="uid://d4c6oqk0y6y6r" path="res://scripts/inventory/inventory.gd" id="4_inventory"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponManager.tscn" id="5_weaponmgr"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponPickup_Pistol.tscn" id="6_pistol"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/WeaponPickup_Rifle.tscn" id="7_rifle"]
+[ext_resource type="Script" path="res://scripts/weapons/weapon_combat.gd" id="8_weaponcombat"]
+
+[sub_resource type="ProceduralSkyMaterial" id="SkyMaterial_test"]
+
+[sub_resource type="Sky" id="Sky_test"]
+sky_material = SubResource("SkyMaterial_test")
+
+[sub_resource type="Environment" id="Environment_test"]
+background_mode = 2
+sky = SubResource("Sky_test")
+ambient_light_source = 3
+ambient_light_energy = 0.8
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.5, 0.5, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_ground"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ground"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="StandardMaterial3D" id="Mat_dummy"]
+albedo_color = Color(0.7, 0.15, 0.15, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_dummy"]
+size = Vector3(0.8, 1.8, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dummy"]
+size = Vector3(0.8, 1.8, 0.4)
+
+[node name="TestScene_020C_Combat" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_test")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.8660254, 0.3830222, -0.3213938, 0, 0.6427876, 0.7660444, 0.5, -0.6634139, 0.55667037, 0, 8, 0)
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+material_override = SubResource("Mat_ground")
+mesh = SubResource("BoxMesh_ground")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_ground")
+
+[node name="SpawnPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 5)
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -2.5)
+
+[node name="WeaponManager" parent="Player/CameraPivot/Camera3D" instance=ExtResource("5_weaponmgr")]
+
+[node name="WeaponFireRayCast" type="RayCast3D" parent="Player/CameraPivot/Camera3D"]
+target_position = Vector3(0, 0, -50)
+
+[node name="WeaponCombat" type="Node3D" parent="Player/CameraPivot/Camera3D"]
+script = ExtResource("8_weaponcombat")
+weapon_manager = NodePath("../WeaponManager")
+fire_ray_cast = NodePath("../WeaponFireRayCast")
+
+[node name="InteractionManager" type="Node3D" parent="."]
+script = ExtResource("3_interactionmgr")
+ray_cast = NodePath("../Player/CameraPivot/Camera3D/RayCast3D")
+
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("4_inventory")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="InteractionPrompt" parent="HUD" instance=ExtResource("2_prompt")]
+layout_mode = 3
+anchors_preset = 7
+offset_top = -40.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="WeaponPickup_Pistol" parent="." instance=ExtResource("6_pistol")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.3, 0)
+
+[node name="WeaponPickup_Rifle" parent="." instance=ExtResource("7_rifle")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.3, 0)
+
+[node name="TestDummy_Near" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, -6)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestDummy_Near"]
+material_override = SubResource("Mat_dummy")
+mesh = SubResource("BoxMesh_dummy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestDummy_Near"]
+shape = SubResource("BoxShape3D_dummy")
+
+[node name="TestDummy_Far" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5, 0.9, -14)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="TestDummy_Far"]
+material_override = SubResource("Mat_dummy")
+mesh = SubResource("BoxMesh_dummy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TestDummy_Far"]
+shape = SubResource("BoxShape3D_dummy")

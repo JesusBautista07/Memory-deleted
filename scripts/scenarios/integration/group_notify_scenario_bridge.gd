@@ -23,7 +23,7 @@ extends ScenarioIntegrationBridge
 ##   on_scenario_changed(previous_id: String, new_id: String)
 ##   on_scenario_reset(scene_id: String)
 ##   on_scenario_reloaded(scene_id: String)
-##   on_scenario_state_changed(scene_id: String, state: SceneState.State)
+##   on_scenario_state_changed(scene_id: String, state: GameSceneState.State)
 ##
 ## Uso: instanciar un nodo con este script por cada grupo que se
 ## quiera notificar y asignar `target_group`, por ejemplo:
@@ -55,7 +55,7 @@ func _on_scenario_reloaded(scene_id: String) -> void:
 	_broadcast(&"on_scenario_reloaded", [scene_id])
 
 
-func _on_scenario_state_changed(scene_id: String, state: SceneState.State) -> void:
+func _on_scenario_state_changed(scene_id: String, state: GameSceneState.State) -> void:
 	_broadcast(&"on_scenario_state_changed", [scene_id, state])
 
 

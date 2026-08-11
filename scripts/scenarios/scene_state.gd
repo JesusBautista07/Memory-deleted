@@ -1,4 +1,4 @@
-class_name SceneState
+class_name GameSceneState
 extends RefCounted
 
 enum State {

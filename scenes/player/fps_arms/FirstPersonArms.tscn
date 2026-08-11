@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="PackedScene" path="res://assets/models/fps_arms/arms_rig.glb" id="1_arms_model"]
+[ext_resource type="Script" path="res://scripts/characters/fps_arms/fps_arms_controller.gd" id="2_arms_controller"]
+
+[node name="FirstPersonArms" type="Node3D"]
+script = ExtResource("2_arms_controller")
+
+[node name="ArmsModel" parent="." instance=ExtResource("1_arms_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, -0.1)
