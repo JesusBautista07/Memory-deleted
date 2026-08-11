@@ -24,6 +24,15 @@ const BODY_MESH_NAME := "SuperHero_Male"
 ## al pelo/cabello del personaje, no a las cejas).
 const HAIR_MESH_NAME := "Eyebrows"
 
+## Nombres reales de las animaciones de agachado dentro de UAL1_Standard.glb
+## (mismo pack que ya expone LocomotionState para Idle/Walk/Sprint). No se
+## han añadido a LocomotionState porque ese script es, por diseño, el punto
+## único de verdad SOLO para el trío Idle/Walk/Sprint (ver su cabecera);
+## agachado se resuelve aquí con el mismo criterio que ya usa
+## psx_character_controller.gd para sus propios personajes PSX.
+const ANIM_CROUCH_IDLE := "Crouch_Idle"
+const ANIM_CROUCH_WALK := "Crouch_Fwd"
+
 @export_group("Apariencia de esta variante")
 ## Tinte multiplicativo sobre la textura de piel/cuerpo original.
 ## Color(1,1,1,1) = tono original sin cambios.
@@ -75,6 +84,16 @@ func _physics_process(_delta: float) -> void:
 	if _movement == null:
 		return
 	var horizontal_speed := Vector2(_movement.velocity.x, _movement.velocity.z).length()
+
+	# CORRECCIÓN: antes se resolvía SIEMPRE con LocomotionState (solo
+	# Idle/Walk/Sprint), así que agachado nunca se llegaba a comprobar aquí
+	# y Crouch_Idle_Loop/Crouch_Fwd_Loop -aunque ya cargadas en la
+	# librería- no se reproducían nunca. Se comprueba primero, igual que ya
+	# hace psx_character_controller.gd para sus propios personajes.
+	if _movement.is_crouching:
+		_play_state(ANIM_CROUCH_WALK if horizontal_speed > move_speed_threshold else ANIM_CROUCH_IDLE)
+		return
+
 	_play_state(LocomotionState.resolve(horizontal_speed, _movement.walk_speed, move_speed_threshold))
 
 

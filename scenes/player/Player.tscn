@@ -37,3 +37,5 @@ spring_length = 2.5
 margin = 0.25
 
 [node name="ThirdPersonCamera" type="Camera3D" parent="CameraPivot/ThirdPersonPitch/ThirdPersonRig"]
+
+[editable path="CharacterVisual"]

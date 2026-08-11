@@ -18,9 +18,9 @@ extends RefCounted
 ## funciona correctamente; si en el futuro se necesita, es un cambio
 ## mecánico y de bajo riesgo.
 
-const ANIM_IDLE := "Idle_Loop"
-const ANIM_WALK := "Walk_Loop"
-const ANIM_SPRINT := "Sprint_Loop"
+const ANIM_IDLE := "Idle"
+const ANIM_WALK := "Walk"
+const ANIM_SPRINT := "Sprint"
 
 ## Determina qué animación de locomoción corresponde al estado de
 ## movimiento actual.
